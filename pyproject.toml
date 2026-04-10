@@ -1,0 +1,32 @@
+[project]
+name = "incident-agent"
+version = "0.1.0"
+description = "Autonomous incident response agent powered by Claude"
+requires-python = ">=3.11"
+dependencies = [
+    "claude-agent-sdk",
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic-settings",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "httpx",
+]
+
+[project.scripts]
+incident-agent = "incident_agent.main:run"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
