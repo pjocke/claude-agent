@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-agent
+  labels:
+    app: incident-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incident-agent
+  template:
+    metadata:
+      labels:
+        app: incident-agent
+    spec:
+      containers:
+        - name: incident-agent
+          image: incident-agent:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: incident-agent-secrets
+          env:
+            - name: MAX_AGENT_TURNS
+              value: "10"
+            - name: LOG_LEVEL
+              value: "INFO"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
