@@ -1,5 +1,7 @@
 # Incident Response Agent
 
+[![Tests](https://github.com/pjocke/claude-agent/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/pjocke/claude-agent/actions/workflows/tests.yml)
+
 An autonomous incident response agent powered by [Claude](https://www.anthropic.com/claude) and the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python). It receives Grafana alert webhooks, investigates using observability data (logs, metrics, traces) via MCP, attempts safe remediations, posts status updates to Slack, and escalates to PagerDuty when the issue cannot be resolved.
 
 ## How It Works
