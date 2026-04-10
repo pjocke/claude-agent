@@ -102,6 +102,26 @@ These are currently stubs. To implement real remediation, replace the stub logic
 
 Allowed namespaces are configured in `remediation.py` (`ALLOWED_NAMESPACES`). The agent cannot target namespaces outside this allowlist.
 
+## Docker
+
+```bash
+docker build -t incident-agent .
+docker run --env-file .env -p 8000:8000 incident-agent
+```
+
+The image includes Node.js for the Slack and PagerDuty MCP servers. You'll need to ensure `mcp-grafana` is available — either install it in the image or mount the binary.
+
+## Kubernetes
+
+Deployment and service manifests are in `k8s/`. Create the secrets and apply:
+
+```bash
+kubectl create secret generic incident-agent-secrets --from-env-file=.env
+kubectl apply -f k8s/
+```
+
+The deployment includes liveness and readiness probes on `/healthz` and resource limits. Ingress is left to the operator since it depends on cluster capabilities.
+
 ## Testing
 
 ```bash
@@ -115,6 +135,8 @@ pytest tests/ -v
 - Agent prompt construction and result handling
 - FastAPI webhook endpoint behavior
 - Full integration lifecycle (fire → investigate → resolve/escalate)
+
+Tests run automatically via GitHub Actions on pushes to `main` and on pull requests, across Python 3.11, 3.12, and 3.13.
 
 ## Project Structure
 
